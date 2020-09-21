@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block body_block %}
+{% load static %}
+{% block head_block %}
+<link rel="stylesheet" type="text/css" href="{% static 'login/login.css'%}">
+<style>
+  @keyframes slide_up {
+      0%{
+          transform: translateY(250px);
+      }
+      100%{
+          transform: translateY(0px)
+      }   
+  }
+  .center{
+          animation: slide_up 1s ease;
+      }
+  </style>
+{% endblock head_block %}
+    <div class="center">
+      <form action="{% url 'reg_sign_in_out:user_login'%}" class="form-signin text-center blockx" method="post">
+        {% csrf_token %}
+        <h1 class="h3 mb-3 font-weight-normal" id="h11">Please sign in</h1>
+        <div class="block">
+          <label for="username"  id="btn-white">Username</label>
+          <input type="text" name="username" id="username" class="formx " placeholder="Username" required="" autofocus="">
+        </div>
+        <label for="inputPassword"  id="btn-white">Password</label>
+        <input type="password" name="password" id="inputPassword" class="formx " placeholder="Password" required="">
+        <div class="checkbox mb-3">
+          <label class="btn-remember">
+            <input type="checkbox" value="remember-me"> Remember me
+          </label>
+        </div>
+        {% if tried %}
+        <h7 >*Enter valid credentials</h7>  <br><br>
+        {% endif %}      
+        <a href="{% url 'reset_password' %}">Forgot Password</a>
+        <button class="btn-signin" type="submit">Sign in</button>
+      </form>
+    </div>
+    {% endblock body_block %}

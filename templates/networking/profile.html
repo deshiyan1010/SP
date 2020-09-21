@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block body_block %}
+{% load static %}
+
+{{user_info.first_name}}  {{user_info.last_name}} {{user_info.email}}
+<img src="{{user_info_set.registration.profile_pic.url}}" alt="img" id="profileimg" onerror="this.onerror=null; this.src='/media/profile_pic/no_pro_pic.jpg'">
+
+{% if related == "Friends" %}
+    <a href="{% url 'networking:friend' 'remove' request.user.username user_info.username %}">Remove friend</a>
+{% elif related == "Requested" %}    
+    <a href="{% url 'networking:friend' 'pull_request' request.user.username user_info.username %}">Requested</a>
+{% else%}
+    <a href="{% url 'networking:friend' 'add' request.user.username user_info.username %}">Add Friend</a>
+{% endif %}   
+
+{% endblock %}

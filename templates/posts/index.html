@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+{% block body_block %}
+{% load static %}
+{% block head_block %}
+<link rel="stylesheet" type="text/css" href="{% static 'posts/post.css'%}">
+{% endblock head_block %}
+
+{% load custom_tags %}
+
+<div class="container">
+    <div class="skew">
+        <h1 >Posts</h1>    
+    </div>
+    <form enctype="multipart/form-data" method="post">
+        {%csrf_token%}
+        {{user.as_p}}
+        <input type="submit" value="Submit">
+    </form>
+
+    <div class='infinite-container'>
+    {% for x in postx %}
+    <div class="bg infinite-item">
+        <h2 class="name ">{{x.user.first_name}} {{x.user.last_name}} </h2>
+         <h3>{{x.time}} </h3>
+        <div class="center">
+            {% if x.post_pic %}           
+            <img src="{{x.post_pic.url}}" alt="img">
+            <h2 class="post"> {{x.post_text}}</h2>       
+        {% else %}
+            
+            <h2 class="post"> {{x.post_text}}</h2> 
+        {% endif %}
+        
+
+
+        {% if x.like_set|match:request.user == "False"%}
+            <a href="{% url 'posts:like' x.id%}">Like</a>
+            
+        {% else %}         
+            <a href="{% url 'posts:dislike' x.id%}">Dislike</a> 
+        {% endif %}
+
+        <br> Like Counter : {{x.like_set.count}}
+
+        {% if x.user.username == request.user.username %}
+            <a href="{% url 'posts:delete_post' x.id%}" class="btn-del">Delete Post</a><br>
+            <a href="{% url 'posts:editpost' x.id%}">Edit Post</a> 
+
+            {% endif %}
+
+        {% for c in x.comment_set.all  %}
+            {{c.comment}}
+            {% if c.userid.username == request.user.username or x.user.username == request.user.username %}
+                <a href="{% url 'posts:delete_comment' x.id c.id %}" class="btn-comment">Delete Comment</a>
+            {% endif %}
+            
+            <br>
+        {% endfor %}
+        
+        <form action="{% url 'posts:home'%}" method="post">
+        {{comment_field.as_p}}
+        {%csrf_token%}
+        <input type="submit" value="Submit" name="{{x.pk}}" id="{{x.pk}}" class="btn-submit">
+        </form>
+        </div>
+      
+    </div>
+     
+        <br><br>
+     
+    {% endfor %}
+    </div>
+    <div class="d-flex d-none position-fixed" style="top:35vh;left:46vw" hidden>
+        <button class="btn btn-primary loading">
+            <span class="spinner-border spinner-border-sm"></span>
+            Please wait...
+        </button>
+    </div>
+    {% if postx.has_next %}
+    <a class="infinite-more-link" href="?page={{ postx.next_page_number }}">More</a>
+    {% endif %}
+    <div class="loading" style="display: none;">
+        Loading...
+    </div>
+  
+</div>
+
+
+
+<!-- like list -->
+<!-- {% for y in x.like_set.all %}
+<h1>{{y.liked_by.username}}</h1> <br>
+{% endfor %} -->
+
+<script src="/static/js/jquery-3.5.1.js" ></script>
+<script src="/static/js/jquery.waypoints.js"></script>
+<script src="/static/js/infinite.js"></script>
+
+<script>
+    $('.loading').hide();
+    var infinite = new Waypoint.Infinite({
+        element: $('.infinite-container')[0],
+
+        offset: 'bottom-in-view',
+
+        onBeforePageLoad: function () {
+            $('.loading').show();
+        },
+        onAfterPageLoad: function () {
+            $('.loading').hide();
+        }
+
+    });
+    
+</script>
+{% endblock %}

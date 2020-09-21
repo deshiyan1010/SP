@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% load static %}
+{% block head_block %}
+<link rel="stylesheet" type="text/css" href="{% static 'reg_sign_in_out/reg.css'%}">
+<style>
+@keyframes slide_up {
+    0%{
+        transform: translateY(250px);
+    }
+    100%{
+        transform: translateY(0px)
+    }   
+}
+.move{
+        animation: slide_up 1s ease;
+    }
+</style>
+{% endblock head_block %}
+{% block body_block %}
+<div class="bg">
+    {% if registered %}
+    <h1>Thanks</h1>
+
+    {% else %}
+    <div class="move">
+    <h3 id="fill">FILL</h3>
+    <div id="form">
+        <div class="float_left">
+            <form enctype="multipart/form-data" method="post">
+                <div class="block">
+                    {% csrf_token %}
+                </div>
+                
+                {{user_form.as_p}}
+                {{profile_form.as_p}}
+                {% csrf_token %}
+                <input type="submit" value="Submit" id="sub">
+            </form>
+        </div>
+    </div>
+    </div>
+    {% if tried %}
+    <p>*Username exists</p>
+    {% endif %}
+
+    {% endif %}
+</div>
+
+{% endblock %}

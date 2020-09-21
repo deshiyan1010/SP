@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% load static %}
+{% block head_block %}
+<link rel="stylesheet" type="text/css" href="{% static 'reg_sign_in_out/reg.css'%}">
+{% endblock head_block %}
+{% block body_block %}
+<div class="bg">
+
+    <div id="form">
+        <div class="float_left">
+            <form enctype="multipart/form-data" method="post">
+                {% csrf_token %}
+                {{form.as_p}}
+                {{form.title.error}}
+                {% csrf_token %}
+                <input type="submit" value="Submit" id="sub">
+            </form>
+        </div>
+    </div>
+
+</div>
+{% endblock %}
+
+

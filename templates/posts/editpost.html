@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block body_block %}
+{% load static %}
+{% block head_block %}
+<link rel="stylesheet" type="text/css" href="{% static 'posts/post.css'%}">
+{% endblock head_block %}
+
+<form method="post">
+    {% csrf_token %}
+    <label for="post_text">Post Text:</label>
+    <input type="text" id="post_text" name="post_text" value="{{post_text}}"><br><br>
+    <input type="submit" value="Submit">
+</form>
+{% endblock %}

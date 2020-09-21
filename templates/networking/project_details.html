@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block body_block %}
+{% load static %}
+
+{% if project_info %}
+    {{project_info.title}} <br>
+    {{project_info.team_lead.first_name}}
+
+    <a href="{{ project_info.project_file.url }}" download>Download</a>
+    {% if applied == "False" and a_part == "False" %}
+        <a href="{% url 'project_management:project_application' project_info.id %}">Apply</a>
+    {% elif applied == "True" and a_part == "False" %}
+        Applied
+    {% else %}
+        In
+    {% endif %}
+    
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% load static %}
+{% block head_block %}
+<link rel="stylesheet" type="text/css" href="{% static 'profilepage/profile.css' %}">
+{% endblock head_block %}
+
+
+
+
+{% block body_block %}
+<header>
+  
+</header>
+<div class="center">
+  <img src="{{user.registration.profile_pic.url}}" alt="img" id="profileimg" onerror="this.onerror=null; this.src='/media/profile_pic/no_pro_pic.jpg'">
+
+  <h1 id="username">{{user.first_name}} {{user.last_name}}</h1>{{user.registration.url}}{{user.username}}
+<br><br>
+
+{% if paid_bool == False %}
+  <button class="btn btn-outline-success"><a href="{% url 'reg_sign_in_out:payment' %}">Become Member</a></button>
+{% else %}
+<h3>Already A Member</h3>
+{% endif %}
+<button class="btn btn-outline-success"><a href="{% url 'profilepage:changeprofileinfo' %}">Update Information</a></button>
+{% for req in req_list %}
+  {{req.from_user.username}}
+  <a href="{% url 'profilepage:friendship_operation' 'Accept' request.user req.from_user.username %}" class="btn-del">Accept</a><br>
+  <a href="{% url 'profilepage:friendship_operation' 'Reject' request.user req.from_user.username %}" class="btn-del">Reject</a><br>
+  {% endfor %}
+
+{% for friend in friend_list %}
+  {{friend.from}}
+{% endfor %}
+
+{% for post in posts_obj%}
+    {% if post.post_pic %}
+        <img src="{{post.post_pic.url}}" alt="img">
+    {% endif %}
+    {{post.post_text}}
+{% endfor %}
+<br>
+{% for comment in comment_obj %}
+ Comment Post: {{comment.post.post_text}}  <br>
+  {% if comment.post.post_pic %}
+  <img src="{{comment.post.post_pic.url}}" alt="img">
+  {% endif %}
+{% endfor %}
+
+{% for req in project_req_list %}
+  {{req.from_user.username}}
+  <a href="{% url 'profilepage:projectmember' 'Accept' req.user.username req.project.id %}" class="btn-del">Accept</a><br>
+  <a href="{% url 'profilepage:projectmember' 'Reject' req.user.username req.project.id %}" class="btn-del">Reject</a><br>
+  {% endfor %}
+
+
+
+</div>
+
+    
+{% endblock %}
+
+
+<!-- important: https://pypi.org/project/django-friendship/ -->

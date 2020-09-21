@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block body_block %}
+{% load static %}
+
+{% if user_list %}
+  
+        {% for user in user_list %}
+        <img src="{{user.registration.profile_pic.url}}" alt="img" id="profileimg" onerror="this.onerror=null; this.src='/media/profile_pic/no_pro_pic.jpg'">
+
+                <a href="{% url 'networking:profile' user.username %}">{{user.first_name}} {{user.last_name}}</a>
+                        <br>
+        {% endfor %}
+{% endif %}
+
+{% if project_list %}
+  
+        {% for project in project_list %}
+                <a href="{% url 'networking:project_view' project.id %}">{{project.title}}</a>
+                <br>
+        {% endfor %}
+{% endif %}
+
+{% endblock %}
